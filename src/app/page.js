@@ -33,7 +33,7 @@ export default function LeapYearChecker() {
         <>
           {/* Celebratory Text */}
           <div className="absolute top-20 text-center text-4xl font-bold text-yellow-400 z-10 animate-bounce">
-            🎉 It's February 29th! Once in 4 years! 🎉
+            🎉 It&apos;s February 29th! Once in 4 years! 🎉
           </div>
 
           {/* Falling Emoji Animation */}
