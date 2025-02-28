@@ -1,101 +1,76 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useState, useEffect } from "react";
+import Head from "next/head";
+
+export default function LeapYearChecker() {
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  const isLeapYear = (currentYear % 4 === 0 && currentYear % 100 !== 0) || currentYear % 400 === 0;
+  const [isLeapDay, setIsLeapDay] = useState(false);
+
+  useEffect(() => {
+    const today = new Date();
+    setIsLeapDay(today.getMonth() === 1 && today.getDate() === 29); // Check if Feb 29
+  }, []);
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="relative flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white overflow-hidden">
+      <Head>
+        <title>Leap Year Checker</title>
+        <meta name="description" content="Check if the current year is a leap year" />
+      </Head>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      {/* Leap Year Message */}
+      <div className="p-6 bg-gray-800 rounded-lg shadow-lg text-center z-10">
+        <h1 className="text-4xl font-bold">Leap Year Checker</h1>
+        <p className="mt-4 text-lg">
+          The year <span className="font-semibold">{currentYear}</span> {isLeapYear ? "is" : "is not"} a leap year.
+        </p>
+      </div>
+
+      {/* Celebration Effect if it's February 29th */}
+      {isLeapDay && (
+        <>
+          {/* Celebratory Text */}
+          <div className="absolute top-20 text-center text-4xl font-bold text-yellow-400 z-10 animate-bounce">
+            🎉 It's February 29th! Once in 4 years! 🎉
+          </div>
+
+          {/* Falling Emoji Animation */}
+          {[...Array(20)].map((_, index) => (
+            <span
+              key={index}
+              className="emoji absolute text-4xl"
+              style={{
+                left: `${Math.random() * 100}vw`, // Random horizontal position
+                top: `-${Math.random() * 20}vh`, // Start slightly above viewport
+                animationDuration: `${Math.random() * 3 + 2}s`, // Random animation speed
+                animationDelay: `${Math.random() * 2}s`, // Random start delay
+              }}
+            >
+              🎉
+            </span>
+          ))}
+        </>
+      )}
+
+      {/* Styles for Falling Animation */}
+      <style jsx>{`
+        @keyframes fall {
+          0% {
+            transform: translateY(0) rotate(0deg);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(100vh) rotate(720deg);
+            opacity: 0;
+          }
+        }
+
+        .emoji {
+          animation: fall linear infinite;
+        }
+      `}</style>
     </div>
   );
 }
